@@ -3,7 +3,6 @@ import Calendar from "./components/calendar/calendar";
 import InputBox from "./components/input-box/input-box";
 
 const App: React.FC = () => {
-  // const date = "23/03/2020";
   const [date, setDate] = useState("");
   const [inputBoxHidden, setInputBoxHidden] = useState(false);
 

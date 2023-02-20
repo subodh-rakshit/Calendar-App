@@ -23,18 +23,20 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
     "December",
   ];
   const [calendarData, setCalendarData] = useState<CalendarDataType[][]>();
-  const [givenMonthYear, setGivenMonthYear] = useState<{
+  const [givenDateMonthYear, setGivenDateMonthYear] = useState<{
     givenMonth: string;
     givenYear: string;
+    givenDate: string;
   }>();
 
   const getCalendarValues = () => {
     try {
       if (givenDate.length > 0) {
         const splitGivenDate = givenDate.split("/");
-        setGivenMonthYear({
+        setGivenDateMonthYear({
           givenMonth: monthList[Number(splitGivenDate[1]) - 1],
           givenYear: splitGivenDate[2],
+          givenDate: splitGivenDate[0],
         });
         const totalDaysInGivenMonth = new Date(
           Number(splitGivenDate[2]),
@@ -47,10 +49,26 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
             splitGivenDate[2] + "-" + splitGivenDate[1] + "-" + day.toString()
           );
           const retrievedDate = dayDateTriggered.toString().substring(8, 10);
-          const retrievedDay = dayDateTriggered.toString().substring(0, 3);
+          const retrievedDay = dayDateTriggered.toString().substring(0, 2);
           totalCalendarData.push({ date: retrievedDate, day: retrievedDay });
         }
-        arrayChunk(totalCalendarData, calendarHeadValues.length);
+        const firstDay = totalCalendarData[0].day;
+        let pastDays = 0;
+        for(let calValue = 0; calValue < calendarHeadValues.length; calValue++){
+          if(calendarHeadValues[calValue] === firstDay){
+            break;
+          }
+          pastDays++;
+        }
+        const totalRelevantData = [];
+        for(let shiftValue = 0; shiftValue < pastDays; shiftValue++){
+          totalRelevantData.push({date: "", day: calendarHeadValues[shiftValue]});
+        }
+        totalCalendarData.forEach((data) => {
+          totalRelevantData.push(data);
+        })
+        console.log(totalRelevantData);
+        arrayChunk(totalRelevantData, calendarHeadValues.length);
       }
     } catch (error) {}
   };
@@ -80,8 +98,9 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
     <div className="w-full flex flex-col m-auto ml-[30%] mr-[30%]">
       {givenDate.length > 0 && (
         <>
-          <p className="flex items-center justify-center bg-back text-fontcolor font-medium">
-            {givenMonthYear?.givenMonth}&nbsp;{givenMonthYear?.givenYear}
+          <p className="flex items-center justify-center bg-back text-fontcolor font-medium p-2">
+            {givenDateMonthYear?.givenMonth}&nbsp;
+            {givenDateMonthYear?.givenYear}
           </p>
           <div className="flex flex-row w-full bg-back p-2">
             {calendarHeadValues.map((data) => {
@@ -98,7 +117,13 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
                 {row.map((columns: CalendarDataType) => {
                   return (
                     <div className="flex flex-1 items-center justify-center">
-                      <p className="text-fontcolor font-medium">
+                      <p
+                        className={`font-medium p-2 ${
+                          columns.date === givenDateMonthYear?.givenDate
+                            ? "bg-fontcolor text-buttonText"
+                            : "text-fontcolor"
+                        }`}
+                      >
                         {columns.date}
                       </p>
                     </div>
