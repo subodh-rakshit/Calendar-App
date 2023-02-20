@@ -29,26 +29,30 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
   }>();
 
   const getCalendarValues = () => {
-    const splitGivenDate = givenDate.split("/");
-    setGivenMonthYear({
-      givenMonth: monthList[Number(splitGivenDate[1]) - 1],
-      givenYear: splitGivenDate[2],
-    });
-    const totalDaysInGivenMonth = new Date(
-      Number(splitGivenDate[2]),
-      Number(splitGivenDate[1]),
-      0
-    ).getDate();
-    const totalCalendarData = [];
-    for (let day = 1; day <= totalDaysInGivenMonth; day++) {
-      const dayDateTriggered = new Date(
-        splitGivenDate[2] + "-" + splitGivenDate[1] + "-" + day.toString()
-      );
-      const retrievedDate = dayDateTriggered.toString().substring(8, 10);
-      const retrievedDay = dayDateTriggered.toString().substring(0, 3);
-      totalCalendarData.push({ date: retrievedDate, day: retrievedDay });
-    }
-    arrayChunk(totalCalendarData, calendarHeadValues.length);
+    try {
+      if (givenDate.length > 0) {
+        const splitGivenDate = givenDate.split("/");
+        setGivenMonthYear({
+          givenMonth: monthList[Number(splitGivenDate[1]) - 1],
+          givenYear: splitGivenDate[2],
+        });
+        const totalDaysInGivenMonth = new Date(
+          Number(splitGivenDate[2]),
+          Number(splitGivenDate[1]),
+          0
+        ).getDate();
+        const totalCalendarData = [];
+        for (let day = 1; day <= totalDaysInGivenMonth; day++) {
+          const dayDateTriggered = new Date(
+            splitGivenDate[2] + "-" + splitGivenDate[1] + "-" + day.toString()
+          );
+          const retrievedDate = dayDateTriggered.toString().substring(8, 10);
+          const retrievedDay = dayDateTriggered.toString().substring(0, 3);
+          totalCalendarData.push({ date: retrievedDate, day: retrievedDay });
+        }
+        arrayChunk(totalCalendarData, calendarHeadValues.length);
+      }
+    } catch (error) {}
   };
 
   const arrayChunk = (data: CalendarDataType[], n: number) => {
@@ -70,36 +74,42 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
 
   useEffect(() => {
     getCalendarValues();
-  }, []);
+  }, [givenDate]);
 
   return (
-    <>
-      <p className="flex items-center justify-center bg-back text-fontcolor font-medium">
-        {givenMonthYear?.givenMonth}&nbsp;{givenMonthYear?.givenYear}
-      </p>
-      <div className="flex flex-row w-full bg-back">
-        {calendarHeadValues.map((data) => {
-          return (
-            <div className="flex flex-1 items-center justify-center text-fontcolor font-medium">
-              {data}
-            </div>
-          );
-        })}
-      </div>
-      {calendarData?.map((row: CalendarDataType[], rowIndex: number) => {
-        return (
-          <div key={rowIndex} className="flex flex-row bg-back">
-            {row.map((columns: CalendarDataType, colIndex: number) => {
+    <div className="w-full flex flex-col m-auto ml-[30%] mr-[30%]">
+      {givenDate.length > 0 && (
+        <>
+          <p className="flex items-center justify-center bg-back text-fontcolor font-medium">
+            {givenMonthYear?.givenMonth}&nbsp;{givenMonthYear?.givenYear}
+          </p>
+          <div className="flex flex-row w-full bg-back p-2">
+            {calendarHeadValues.map((data) => {
               return (
-                <div className="flex flex-1 items-center justify-center">
-                  <p className="text-fontcolor font-medium">{columns.date}</p>
+                <div className="flex flex-1 items-center justify-center text-fontcolor font-medium">
+                  {data}
                 </div>
               );
             })}
           </div>
-        );
-      })}
-    </>
+          {calendarData?.map((row: CalendarDataType[], rowIndex: number) => {
+            return (
+              <div key={rowIndex} className="flex flex-row bg-back p-2">
+                {row.map((columns: CalendarDataType) => {
+                  return (
+                    <div className="flex flex-1 items-center justify-center">
+                      <p className="text-fontcolor font-medium">
+                        {columns.date}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </>
+      )}
+    </div>
   );
 };
 

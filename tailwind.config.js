@@ -7,7 +7,10 @@ module.exports = {
     extend: {},
     colors: {
       back: "#19272C",
-      fontcolor: "#829395"
+      fontcolor: "#829395",
+      errorColor: "#f87171",
+      buttonBlueColor: "#0D6EFD",
+      buttonText: "#ffffff"
     }
   },
   plugins: [],
