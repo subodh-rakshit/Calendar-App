@@ -3,7 +3,10 @@ import Calendar from "./components/calendar/calendar";
 import InputBox from "./components/input-box/input-box";
 
 const App: React.FC = () => {
+  // Setting up the date value from the input box
   const [date, setDate] = useState("");
+
+  // Triggering whether to show input box or not
   const [inputBoxHidden, setInputBoxHidden] = useState(false);
 
   return (
