@@ -29,7 +29,7 @@ const InputBox: React.FC<InputBoxDataType> = ({ inputValueCallback, hideInputBox
       <input
         type="text"
         value={inputValue}
-        className="flex p-2 m-2 items-center justify-center"
+        className="flex p-2 m-2 items-center justify-center outline-none border-[2px] rounded border-borderColorInputBox"
         onChange={(event) => {
           setInputValue(event.target.value);
           setError(false);

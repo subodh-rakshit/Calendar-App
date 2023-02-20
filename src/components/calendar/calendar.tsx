@@ -150,7 +150,7 @@ const Calendar: React.FC<CalendarDataProps> = ({ givenDate }) => {
                             : "text-fontcolor"
                         }`}
                       >
-                        {columns.date}
+                        {Number(columns.date) !== 0 && Number(columns.date)}
                       </p>
                     </div>
                   );
