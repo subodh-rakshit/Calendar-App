@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Calendar from "./components/calendar/calendar";
+import InputBox from "./components/input-box/input-box";
 
-function App() {
+const App: React.FC = () => {
+  // Setting up the date value from the input box
+  const [date, setDate] = useState("");
+
+  // Triggering whether to show input box or not
+  const [inputBoxHidden, setInputBoxHidden] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="absolute flex top-0 bottom-0 right-0 left-0">
+      {!inputBoxHidden && (
+        <InputBox
+          inputValueCallback={(value) => setDate(value)}
+          hideInputBoxCallback={() => setInputBoxHidden(!inputBoxHidden)}
+        />
+      )}
+      {inputBoxHidden && <Calendar givenDate={date} />}
     </div>
   );
-}
+};
 
 export default App;
