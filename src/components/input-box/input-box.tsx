@@ -5,7 +5,10 @@ type InputBoxDataType = {
   inputValueCallback: (inputData: string) => void;
   hideInputBoxCallback: () => void;
 };
-const InputBox: React.FC<InputBoxDataType> = ({ inputValueCallback, hideInputBoxCallback }) => {
+const InputBox: React.FC<InputBoxDataType> = ({
+  inputValueCallback,
+  hideInputBoxCallback,
+}) => {
   // Storing the value passed by the user in the input box
   const [inputValue, setInputValue] = useState("");
 
@@ -15,7 +18,8 @@ const InputBox: React.FC<InputBoxDataType> = ({ inputValueCallback, hideInputBox
   // Validating the input data on the click of `Generate Calendar` button click
   const inputValidation = (value: string) => {
     // Regex to validate the data in the form of "DD/MM/YYYY"
-    const regex = /(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$/;
+    const regex =
+      /(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$/;
     if (regex.test(value)) {
       inputValueCallback(value);
       hideInputBoxCallback();
@@ -26,6 +30,10 @@ const InputBox: React.FC<InputBoxDataType> = ({ inputValueCallback, hideInputBox
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
+      <p className="font-semibold">
+        Please Enter value in the form of DD/MM/YYYY only (Eg. 23/03/2020 or
+        03/10/2020)
+      </p>
       <input
         type="text"
         value={inputValue}
@@ -43,8 +51,8 @@ const InputBox: React.FC<InputBoxDataType> = ({ inputValueCallback, hideInputBox
       </button>
       {error ? (
         <p className="font-semibold text-errorColor">
-          Enter value in the form of DD/MM/YYYY only (Eg. 23/03/2020 or
-          03/10/2020)
+          Error: Value is not in the form of DD/MM/YYYY (Eg. 23/03/2020 or
+          03/10/2020). Please try again.
         </p>
       ) : (
         <p>&nbsp;</p>
